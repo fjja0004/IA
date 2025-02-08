@@ -16,7 +16,7 @@ class Alumno:
     def getcorreo(self):
         return self.__correo
 
-    def creaAlumno():
+    def creaAlumno(self):
         nombre = input("Nombre: ")
         apellido = input("Apellido: ")
         dni = input("DNI: ")
@@ -66,11 +66,13 @@ def main():
     listafichero = fichero.readlines()
 
     for linea in listafichero:
-        print(linea)
+        print(linea.strip())
+        print("hola")
 
 
 
 
+main()
 
 
 
