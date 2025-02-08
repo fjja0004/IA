@@ -52,7 +52,7 @@ class AlumnoIA(Alumno):
         notas.append(int(input("Nota de la practica 2: ")))
         notas.append(int(input("Nota de la practica 3: ")))
         notas.append(int(input("Nota de la practica 4: ")))
-        self.listanotas = notas
+        self.__listanotas = notas
 
         suma=0
         for nota in notas:
@@ -68,14 +68,13 @@ def main():
 
     fichero = open(nombrefichero, modo)
     listafichero = fichero.readlines()
+    fichero.close()
 
     for linea in listafichero:
         listalinea=linea.strip().split(",")
         dni=int(listalinea[1])
         if dni%2 == 1 : #El alumno tiene un dni impar
             alumnosimpares.append(linea)
-
-    fichero.close()
 
     nombrefichero = "impares.txt"
     modo = "wt"
