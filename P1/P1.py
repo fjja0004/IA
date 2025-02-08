@@ -54,10 +54,20 @@ class AlumnoIA(Alumno):
         self.listanotas = notas
 
         suma=0
-        for nota in self.listanotas:
+        for nota in notas:
             suma=suma+nota
-        media=suma/4
-        print("La media de la practica es: " + media)
+        print("La media de la practica es: " + suma/4)
+
+
+def main():
+    nombrefichero = "datos1.txt"
+    modo = "rt"
+    fichero = open(nombrefichero, modo)
+    listafichero = fichero.readlines()
+
+    for linea in listafichero:
+        print(linea)
+
 
 
 
