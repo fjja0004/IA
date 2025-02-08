@@ -16,7 +16,8 @@ class Alumno:
     def getcorreo(self):
         return self.__correo
 
-    def creaAlumno(self):
+    @staticmethod
+    def creaAlumno():
         nombre = input("Nombre: ")
         apellido = input("Apellido: ")
         dni = input("DNI: ")
@@ -32,7 +33,7 @@ class Alumno:
 
 
 class AlumnoIA(Alumno):
-    def __init__(self, nombre, apellido, dni, correo, grupoT, grupoP, listanotas):
+    def __init__(self, nombre, apellido, dni, correo, grupoT, grupoP, listanotas = None):
         Alumno.__init__(self, nombre, apellido, dni, correo)
         self.__grupoT = grupoT
         self.__grupoP = grupoP
@@ -56,7 +57,7 @@ class AlumnoIA(Alumno):
         suma=0
         for nota in notas:
             suma=suma+nota
-        print("La media de la practica es: " + suma/4)
+        print("La media de la practica es: " + str(suma/4))
 
 
 def main():
@@ -81,11 +82,6 @@ def main():
     fichero = open(nombrefichero, modo)
     fichero.writelines(alumnosimpares)
     fichero.close()
-
-
-
-
-
 
 
 
