@@ -60,14 +60,32 @@ class AlumnoIA(Alumno):
 
 
 def main():
+
     nombrefichero = "datos1.txt"
     modo = "rt"
+    alumnosimpares = []
+
     fichero = open(nombrefichero, modo)
     listafichero = fichero.readlines()
 
     for linea in listafichero:
-        print(linea.strip())
-        print("hoa")
+        listalinea=linea.strip().split(",")
+        dni=int(listalinea[1])
+        if dni%2 == 1 : #El alumno tiene un dni impar
+            alumnosimpares.append(linea)
+
+    fichero.close()
+
+    nombrefichero = "impares.txt"
+    modo = "wt"
+    fichero = open(nombrefichero, modo)
+    fichero.writelines(alumnosimpares)
+    fichero.close()
+
+
+
+
+
 
 
 
