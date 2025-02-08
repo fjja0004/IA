@@ -67,7 +67,8 @@ def main():
 
     for linea in listafichero:
         print(linea.strip())
-        print("hola")
+        print("hoa")
+
 
 
 
