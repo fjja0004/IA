@@ -18,7 +18,7 @@ class Alumno:
         return self.__correo
 
     @staticmethod
-    def crea_alumno(self):
+    def crea_alumno():
         nombre = input("Nombre: ")
         apellido = input("Apellido: ")
         dni = input("DNI: ")
