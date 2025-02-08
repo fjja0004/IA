@@ -27,10 +27,10 @@ class Alumno:
 
     def muestra_alumno(self):
         print("Datos del alumno:")
-        print("Nombre: " + self.get_nombre())
-        print("Apellido: " + self.get_apellido())
-        print("DNI: " + self.get_dni())
-        print("Correo: " + self.get_correo())
+        print("Nombre: " + self.__nombre)
+        print("Apellido: " + self.__apellido)
+        print("DNI: " + self.__dni)
+        print("Correo: " + self.__correo)
 
 
 class AlumnoIA(Alumno):
