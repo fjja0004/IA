@@ -129,8 +129,8 @@ class alvaro3(Agent):
 
         if self.direccion_anterior in state.getLegalActions():
             return self.direccion_anterior
-        if random.randint(0, 10) == 1:
-            self.direccion_anterior = Directions.REVERSE[self.direccion_anterior]
+        if Directions.RIGHT[self.direccion_anterior] in state.getLegalActions() and Directions.LEFT[self.direccion_anterior] in state.getLegalActions():
+            self.direccion_anterior = random.choice((Directions.RIGHT[self.direccion_anterior], Directions.LEFT[self.direccion_anterior]))
             return self.direccion_anterior
         if Directions.RIGHT[self.direccion_anterior] in state.getLegalActions():
             self.direccion_anterior = Directions.RIGHT[self.direccion_anterior]
