@@ -54,12 +54,6 @@ class javier1(Agent):
 
     def getAction(self, state):
 
-        if len(state.getLegalActions()) == 1:
-            if Directions.REVERSE[self.dir_anterior] in state.getLegalActions():
-                self.dir_anterior = Directions.REVERSE[self.dir_anterior]
-                self.actualizar_celda()
-                return self.dir_anterior
-
         self.dir_anterior = self.calcular_siguiente_dir(state)
         self.actualizar_celda()
         self.actualizar_mapa()
@@ -80,21 +74,19 @@ class javier1(Agent):
             self.mapa[(self.celda_actual[0], self.celda_actual[1])] = True
 
     def calcular_siguiente_dir(self, state):
-        direcciones = state.getLegalActions()
-        for dir in direcciones:
-            if dir == Directions.NORTH:
-                if (self.celda_actual[0], self.celda_actual[1] + 1) not in self.mapa:
-                    return dir
-            elif dir == Directions.SOUTH:
-                if (self.celda_actual[0], self.celda_actual[1] - 1) not in self.mapa:
-                    return dir
-            elif dir == Directions.EAST:
-                if (self.celda_actual[0] + 1, self.celda_actual[1]) not in self.mapa:
-                    return dir
-            elif dir == Directions.WEST:
-                if (self.celda_actual[0] - 1, self.celda_actual[1]) not in self.mapa:
-                    return dir
-        return self.dir_anterior
+        if Directions.NORTH in state.getLegalActions():
+            if (self.celda_actual[0], self.celda_actual[1] + 1) not in self.mapa:
+                return Directions.NORTH
+        elif Directions.SOUTH in state.getLegalActions():
+            if (self.celda_actual[0], self.celda_actual[1] - 1) not in self.mapa:
+                return Directions.SOUTH
+        elif Directions.EAST in state.getLegalActions():
+            if (self.celda_actual[0] + 1, self.celda_actual[1]) not in self.mapa:
+                return Directions.EAST
+        elif Directions.WEST in state.getLegalActions():
+            if (self.celda_actual[0] - 1, self.celda_actual[1]) not in self.mapa:
+                return Directions.WEST
+        return Directions.REVERSE[self.dir_anterior]
 
 
 # Version 1 - Alvaro: Solo se mueve recto, derecha, izquierda, reverso (con bucles menores)
