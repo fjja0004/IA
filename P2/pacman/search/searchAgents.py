@@ -189,12 +189,19 @@ class alvaro3(Agent):
             self.direccion_anterior = Directions.REVERSE[self.direccion_anterior]
             return self.direccion_anterior
 
+
 # Version 4 - Alvaro: Mejora del 3
 class alvaro4(Agent):
     def __init__(self):
         super().__init__()
         self.celdas_visitadas = set()
         self.direccion_anterior = None
+        self.pasos = 0
+
+    def __del__(self):
+        print("Pasos: ", self.pasos)
+        print("Celdas únicas visitadas: ", len(self.celdas_visitadas))
+        print("Ratio de repetición: ", self.pasos / len(self.celdas_visitadas))
 
     def getAction(self, state):
         actual = state.getPacmanPosition()
@@ -209,32 +216,40 @@ class alvaro4(Agent):
                 desplazamiento_y = nueva_posicion[1] - actual[1]
                 tupla = (desplazamiento_x, desplazamiento_y)
                 self.direccion_anterior = Actions.vectorToDirection(tupla)
+                self.pasos += 1
                 return self.direccion_anterior
 
-        if (Directions.RIGHT[self.direccion_anterior] in state.getLegalActions() or Directions.LEFT[self.direccion_anterior]in state.getLegalActions()) \
+        if (Directions.RIGHT[self.direccion_anterior] in state.getLegalActions() or Directions.LEFT[
+            self.direccion_anterior] in state.getLegalActions()) \
                 and self.direccion_anterior in state.getLegalActions():
-            legal=[self.direccion_anterior];
+            legal = [self.direccion_anterior];
             if Directions.RIGHT[self.direccion_anterior] in state.getLegalActions():
                 legal.append(Directions.RIGHT[self.direccion_anterior])
             if Directions.LEFT[self.direccion_anterior] in state.getLegalActions():
                 legal.append(Directions.LEFT[self.direccion_anterior])
             self.direccion_anterior = random.choice(legal);
+            self.pasos += 1
             return self.direccion_anterior
         if Directions.RIGHT[self.direccion_anterior] in state.getLegalActions() and Directions.LEFT[
             self.direccion_anterior] in state.getLegalActions():
             self.direccion_anterior = random.choice(
                 (Directions.RIGHT[self.direccion_anterior], Directions.LEFT[self.direccion_anterior]))
+            self.pasos += 1
             return self.direccion_anterior
         if self.direccion_anterior in state.getLegalActions():
+            self.pasos += 1
             return self.direccion_anterior
         if Directions.RIGHT[self.direccion_anterior] in state.getLegalActions():
             self.direccion_anterior = Directions.RIGHT[self.direccion_anterior]
+            self.pasos += 1
             return self.direccion_anterior
         if Directions.LEFT[self.direccion_anterior] in state.getLegalActions():
             self.direccion_anterior = Directions.LEFT[self.direccion_anterior]
+            self.pasos += 1
             return self.direccion_anterior
         if Directions.REVERSE[self.direccion_anterior] in state.getLegalActions():
             self.direccion_anterior = Directions.REVERSE[self.direccion_anterior]
+            self.pasos += 1
             return self.direccion_anterior
 
 
