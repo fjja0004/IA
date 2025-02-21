@@ -220,6 +220,11 @@ class alvaro4(Agent):
                 legal.append(Directions.LEFT[self.direccion_anterior])
             self.direccion_anterior = random.choice(legal);
             return self.direccion_anterior
+        if Directions.RIGHT[self.direccion_anterior] in state.getLegalActions() and Directions.LEFT[
+            self.direccion_anterior] in state.getLegalActions():
+            self.direccion_anterior = random.choice(
+                (Directions.RIGHT[self.direccion_anterior], Directions.LEFT[self.direccion_anterior]))
+            return self.direccion_anterior
         if self.direccion_anterior in state.getLegalActions():
             return self.direccion_anterior
         if Directions.RIGHT[self.direccion_anterior] in state.getLegalActions():
