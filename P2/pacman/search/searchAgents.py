@@ -230,23 +230,28 @@ class alvaro4(Agent):
             self.direccion_anterior = random.choice(legal);
             self.pasos += 1
             return self.direccion_anterior
+
         if Directions.RIGHT[self.direccion_anterior] in state.getLegalActions() and Directions.LEFT[
             self.direccion_anterior] in state.getLegalActions():
             self.direccion_anterior = random.choice(
                 (Directions.RIGHT[self.direccion_anterior], Directions.LEFT[self.direccion_anterior]))
             self.pasos += 1
             return self.direccion_anterior
+
         if self.direccion_anterior in state.getLegalActions():
             self.pasos += 1
             return self.direccion_anterior
+
         if Directions.RIGHT[self.direccion_anterior] in state.getLegalActions():
             self.direccion_anterior = Directions.RIGHT[self.direccion_anterior]
             self.pasos += 1
             return self.direccion_anterior
+
         if Directions.LEFT[self.direccion_anterior] in state.getLegalActions():
             self.direccion_anterior = Directions.LEFT[self.direccion_anterior]
             self.pasos += 1
             return self.direccion_anterior
+
         if Directions.REVERSE[self.direccion_anterior] in state.getLegalActions():
             self.direccion_anterior = Directions.REVERSE[self.direccion_anterior]
             self.pasos += 1
