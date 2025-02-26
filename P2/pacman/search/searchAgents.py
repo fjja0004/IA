@@ -197,6 +197,7 @@ class alvaro4(Agent):
         self.celdas_visitadas = set()
         self.direccion_anterior = None
         self.pasos = 0
+        self.pila = util.Stack()
 
     def __del__(self):
         print("Pasos: ", self.pasos)
@@ -217,46 +218,14 @@ class alvaro4(Agent):
                 tupla = (desplazamiento_x, desplazamiento_y)
                 self.direccion_anterior = Actions.vectorToDirection(tupla)
                 self.pasos += 1
+                self.pila.push(self.direccion_anterior)
                 return self.direccion_anterior
 
-        if (Directions.RIGHT[self.direccion_anterior] in state.getLegalActions() or Directions.LEFT[
-            self.direccion_anterior] in state.getLegalActions()) \
-                and self.direccion_anterior in state.getLegalActions():
-            legal = [self.direccion_anterior];
-            if Directions.RIGHT[self.direccion_anterior] in state.getLegalActions():
-                legal.append(Directions.RIGHT[self.direccion_anterior])
-            if Directions.LEFT[self.direccion_anterior] in state.getLegalActions():
-                legal.append(Directions.LEFT[self.direccion_anterior])
-            self.direccion_anterior = random.choice(legal);
+        dir_contraria = Directions.REVERSE[self.pila.pop()]
+        if dir_contraria in state.getLegalActions():
+            self.direccion_anterior = dir_contraria
             self.pasos += 1
             return self.direccion_anterior
-
-        if Directions.RIGHT[self.direccion_anterior] in state.getLegalActions() and Directions.LEFT[
-            self.direccion_anterior] in state.getLegalActions():
-            self.direccion_anterior = random.choice(
-                (Directions.RIGHT[self.direccion_anterior], Directions.LEFT[self.direccion_anterior]))
-            self.pasos += 1
-            return self.direccion_anterior
-
-        if self.direccion_anterior in state.getLegalActions():
-            self.pasos += 1
-            return self.direccion_anterior
-
-        if Directions.RIGHT[self.direccion_anterior] in state.getLegalActions():
-            self.direccion_anterior = Directions.RIGHT[self.direccion_anterior]
-            self.pasos += 1
-            return self.direccion_anterior
-
-        if Directions.LEFT[self.direccion_anterior] in state.getLegalActions():
-            self.direccion_anterior = Directions.LEFT[self.direccion_anterior]
-            self.pasos += 1
-            return self.direccion_anterior
-
-        if Directions.REVERSE[self.direccion_anterior] in state.getLegalActions():
-            self.direccion_anterior = Directions.REVERSE[self.direccion_anterior]
-            self.pasos += 1
-            return self.direccion_anterior
-
 
 class GoWestAgent(Agent):
     "An agent that goes West until it can't."
