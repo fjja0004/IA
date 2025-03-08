@@ -92,6 +92,51 @@ def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
 
+    nodos_explorados = set()
+    pila = util.Stack()
+    lista_movimientos = []
+
+    # Añadimos el nodo inicial a la pila y lo marcamos como explorado
+    pila.push((problem.getStartState(), None))
+    nodos_explorados.add(problem.getStartState())
+
+    while not pila.isEmpty():
+        tupla_actual = pila.pop()
+
+        if problem.isGoalState(tupla_actual[0]):
+            for tupla in pila.list:
+                lista_movimientos.append(tupla[1])
+            return lista_movimientos
+
+        for tupla in problem.getSuccessors(tupla_actual[0]):
+            if tupla[0] not in nodos_explorados:
+                pila.push(tupla)
+                nodos_explorados.add(tupla[0])
+
+    """
+    estados_explorados = set()
+    pila = util.Stack()
+    lista_movimientos = []
+    estados_explorados.add(problem.getStartState());
+    for tupla in problem.getSuccessors(problem.getStartState()):
+        pila.push(tupla)
+
+    while not pila.isEmpty():
+        tupla_actual=pila.pop()
+        lista_movimientos.append(tupla_actual[1])
+        necesita_volver=True
+        if problem.isGoalState(tupla_actual[0]):
+            return lista_movimientos
+        for tupla in problem.getSuccessors(tupla_actual[0]):
+            if tupla[0] not in estados_explorados:
+                pila.push(tupla)
+                necesita_volver=False
+        if necesita_volver:
+            lista_movimientos.pop(len(lista_movimientos))
+
+    return lista_movimientos
+    """
+
 def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
