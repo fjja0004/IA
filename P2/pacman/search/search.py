@@ -21,6 +21,7 @@ import util
 from game import Directions
 from typing import List
 
+
 class SearchProblem:
     """
     This class outlines the structure of a search problem, but doesn't implement
@@ -64,8 +65,6 @@ class SearchProblem:
         util.raiseNotDefined()
 
 
-
-
 def tinyMazeSearch(problem: SearchProblem) -> List[Directions]:
     """
     Returns a sequence of moves that solves tinyMaze.  For any other maze, the
@@ -73,7 +72,8 @@ def tinyMazeSearch(problem: SearchProblem) -> List[Directions]:
     """
     s = Directions.SOUTH
     w = Directions.WEST
-    return  [s, s, w, s, w, w, s, w]
+    return [s, s, w, s, w, w, s, w]
+
 
 def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
     """
@@ -90,65 +90,41 @@ def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
+    pila = util.Stack()  # Almacena los estados visitados del grafo y los acciones para llegar a ellos
+    estados_visitados = set()  # Almacena los estados visitados
+    lista_acciones = []  # Almacena las acciones para llegar al estado objetivo
 
-    nodos_explorados = set()
-    pila = util.Stack()
-    lista_movimientos = []
-
-    # Añadimos el nodo inicial a la pila y lo marcamos como explorado
     pila.push((problem.getStartState(), None))
-    nodos_explorados.add(problem.getStartState())
 
     while not pila.isEmpty():
-        tupla_actual = pila.pop()
-        
-        if problem.isGoalState(tupla_actual[0]):
-            for tupla in pila.list:
-                lista_movimientos.append(tupla[1])
-            return lista_movimientos
-        
-        for tupla in problem.getSuccessors(tupla_actual[0]):
-            if tupla[0] not in nodos_explorados:
-                pila.push(tupla)
-                nodos_explorados.add(tupla[0])
+        estado_actual = pila.list[-1]
+        lista_acciones.append(estado_actual[1])
+        if problem.isGoalState(estado_actual[0]):
+            return lista_acciones
+        else:
+            estados_visitados.add(estado_actual[0])
 
+        sucesores = problem.getSuccessors(estado_actual[0])
+        if len(sucesores) == 0:
+            pila.pop()
+            lista_acciones.pop()
 
-    """
-    estados_explorados = set()
-    pila = util.Stack()
-    lista_movimientos = []
-    estados_explorados.add(problem.getStartState());
-    for tupla in problem.getSuccessors(problem.getStartState()):
-        pila.push(tupla)
-    
-    while not pila.isEmpty():
-        tupla_actual=pila.pop()
-        lista_movimientos.append(tupla_actual[1])
-        necesita_volver=True
-        if problem.isGoalState(tupla_actual[0]):
-            return lista_movimientos
-        for tupla in problem.getSuccessors(tupla_actual[0]):
-            if tupla[0] not in estados_explorados:
-                pila.push(tupla)
-                necesita_volver=False
-        if necesita_volver:
-            lista_movimientos.pop(len(lista_movimientos))
+        for sucesor in sucesores:
+            if sucesor[0] not in estados_visitados:
+                pila.push((sucesor[0], sucesor[1]))
 
-    return lista_movimientos
-    """
-    
-    
-        
 
 def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
 
+
 def uniformCostSearch(problem: SearchProblem) -> List[Directions]:
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
+
 
 def nullHeuristic(state, problem=None) -> float:
     """
@@ -157,10 +133,12 @@ def nullHeuristic(state, problem=None) -> float:
     """
     return 0
 
+
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic) -> List[Directions]:
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
+
 
 # Abbreviations
 bfs = breadthFirstSearch
