@@ -159,11 +159,53 @@ def funcionheuristicaeuclidea(state, problem) -> float:
     dist = math.sqrt((posactual[0] - objetivo[0]) ** 2 + (posactual[1] - objetivo[1]) ** 2)
     return dist
 
+def generarlista(estado_objetivo, predecesores) -> List[Directions]:
+    ruta = []
+    while predecesores[estado_objetivo][2] is not None:
+        ruta.insert(0, predecesores[estado_objetivo][0])
+        estado_objetivo = predecesores[estado_objetivo][2]
 
-def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic) -> List[Directions]:
+    return ruta
+
+def aStarSearch(problem: SearchProblem, heuristic=funcionheuristicaeuclidea) -> List[Directions]:
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    colap = util.PriorityQueue() # Cola por prioridad
+    estados_visitados = set()  # Almacena los estados visitados
+    predecesores = {} # Diccionario de listas [movimiento, costeac, estadoant]
+
+    estados_visitados.add(problem.getStartState())
+    predecesores[problem.getStartState()] = [None, 0, None]
+
+    estado_actual = problem.getStartState()
+    listatuplas = problem.getSuccessors(estado_actual)
+    costeac = predecesores[estado_actual][1]
+    for tupla in listatuplas:
+        if tupla[0] not in estados_visitados:
+            valorf = tupla[2] + 0 + heuristic(tupla[0], problem)
+            colap.push(tupla, valorf)
+            predecesores[tupla[0]] = [tupla[1], costeac + tupla[2], estado_actual]
+
+    while not colap.isEmpty():
+        estado_actual, accion, coste = colap.pop()
+        costeac = predecesores[estado_actual][1]
+
+        if problem.isGoalState(estado_actual):
+            return generarlista(estado_actual, predecesores)  # Objetivo alcanzado
+
+        if estado_actual not in estados_visitados:
+            estados_visitados.add(estado_actual)
+
+        listatuplas = problem.getSuccessors(estado_actual)
+        for tupla in listatuplas:
+            valorf = tupla[2] + costeac + heuristic(tupla[0], problem)
+            colap.push(tupla, valorf)
+            predecesores[tupla[0]] = [tupla[1], costeac + tupla[2], estado_actual]
+
+    return []
+
+
+
 
 
 # Abbreviations
