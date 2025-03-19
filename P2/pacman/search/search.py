@@ -146,7 +146,7 @@ def nullHeuristic(state, problem=None) -> float:
 def funcionheuristicaeuclidea(state, problem) -> float:
     objetivo = problem.goal
     posactual = state
-    dist = math.sqrt((state[0] - objetivo[0]) ** 2 + (state[1] - objetivo[1]) ** 2)
+    dist = math.sqrt((posactual[0] - objetivo[0]) ** 2 + (posactual[1] - objetivo[1]) ** 2)
     return dist
 
 
