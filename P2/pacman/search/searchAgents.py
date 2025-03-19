@@ -81,6 +81,8 @@ class explorador(Agent):
             self.pasos += 1
             return self.direccion_anterior
 
+
+
 class GoWestAgent(Agent):
     "An agent that goes West until it can't."
 

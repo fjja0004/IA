@@ -90,31 +90,7 @@ def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
-    """
-    pila = util.Stack()  # Almacena los estados visitados del grafo y los acciones para llegar a ellos
-    estados_visitados = set()  # Almacena los estados visitados
-    lista_acciones = []  # Almacena las acciones para llegar al estado objetivo
 
-    pila.push((problem.getStartState(), None))
-
-    while not pila.isEmpty():
-        estado_actual = pila.list[-1]
-        lista_acciones.append(estado_actual[1])
-        if problem.isGoalState(estado_actual[0]):
-            return lista_acciones
-        else:
-            estados_visitados.add(estado_actual[0])
-
-        sucesores = problem.getSuccessors(estado_actual[0])
-        if len(sucesores) == 0:
-            pila.pop()
-            lista_acciones.pop()
-
-        for sucesor in sucesores:
-            if sucesor[0] not in estados_visitados:
-                pila.push((sucesor[0], sucesor[1]))
-
-""""""""" #Alvaro:
     pila = util.Stack()  # Almacena pares (estado, accion llegar a ese estado) de estados que quedan por visitar y ya visitados
     estados_visitados = set()  # Almacena los estados visitados
     lista_acciones = []  # Almacena las acciones para llegar al estado objetivo
