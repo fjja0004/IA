@@ -51,10 +51,10 @@ import random
 class explorador_pila(Agent):
     def __init__(self):
         super().__init__()
-        self.celdas_visitadas = set()
-        self.direccion_anterior = None
-        self.pasos = 0
-        self.pila = util.Stack()
+        self.celdas_visitadas = set()  # Conjunto de celdas visitadas
+        self.direccion_anterior = None  # Dirección en la que se movió en el paso anterior
+        self.pasos = 0  # Número de pasos realizados
+        self.pila = util.Stack()  # Pila de movimientos realizados
 
     def __del__(self):
         print("Pasos: ", self.pasos)
@@ -62,22 +62,30 @@ class explorador_pila(Agent):
         print("Ratio de repetición: ", self.pasos / len(self.celdas_visitadas))
 
     def getAction(self, state):
-        actual = state.getPacmanPosition()
+        actual = state.getPacmanPosition()  # Posición actual del agente
+
+        # Si la celda actual no ha sido visitada, se añade al conjunto de celdas visitadas
         if actual not in self.celdas_visitadas:
             self.celdas_visitadas.add(actual)
 
+        # Se obtienen las celdas accesibles desde la posición actual
         paredes = state.getWalls()
         accesibles = Actions.getLegalNeighbors(actual, paredes)
+
+        # Se recorren las celdas accesibles
         for nueva_posicion in accesibles:
+            # Si la celda no ha sido visitada, se calcula la dirección en la que se debe mover el agente
             if nueva_posicion not in self.celdas_visitadas:
                 desplazamiento_x = nueva_posicion[0] - actual[0]
                 desplazamiento_y = nueva_posicion[1] - actual[1]
                 tupla = (desplazamiento_x, desplazamiento_y)
                 self.direccion_anterior = Actions.vectorToDirection(tupla)
                 self.pasos += 1
-                self.pila.push(self.direccion_anterior)
-                return self.direccion_anterior
+                self.pila.push(self.direccion_anterior)  # Se añade la dirección a la pila
+                return self.direccion_anterior  # Se devuelve la dirección
 
+        # Si ninguna celda accesible es nueva, se mueve en la dirección contraria
+        # a la que se movió en el paso anterior, para deshacer el camino.
         dir_contraria = Directions.REVERSE[self.pila.pop()]
         if dir_contraria in state.getLegalActions():
             self.direccion_anterior = dir_contraria
@@ -85,7 +93,7 @@ class explorador_pila(Agent):
             return self.direccion_anterior
 
 
-# Explorador aleatorio. Cunado se encuentra en una casilla rodeada de casillas visitadas,
+# Explorador aleatorio. Cuando se encuentra en una casilla rodeada de casillas visitadas,
 # elige una dirección aleatoria.
 class explorador_aleatorio(Agent):
     def __init__(self):
