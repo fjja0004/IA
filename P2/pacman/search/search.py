@@ -16,6 +16,7 @@
 In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
 """
+import math
 
 import util
 from game import Directions
@@ -151,6 +152,12 @@ def nullHeuristic(state, problem=None) -> float:
     goal in the provided SearchProblem.  This heuristic is trivial.
     """
     return 0
+
+def funcionheuristicaeuclidea(state, problem) -> float:
+    objetivo = problem.goal
+    posactual = state
+    dist = math.sqrt((posactual[0] - objetivo[0]) ** 2 + (posactual[1] - objetivo[1]) ** 2)
+    return dist
 
 
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic) -> List[Directions]:
