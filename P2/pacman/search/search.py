@@ -90,34 +90,45 @@ def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
-
-    pila = util.Stack()  # Almacena pares (estado, accion llegar a ese estado) de estados que quedan por visitar y ya visitados
+    # La pila almacena pares (estado, accion llegar a ese estado)
+    # de estados que quedan por visitar y ya visitados
+    pila = util.Stack()
     estados_visitados = set()  # Almacena los estados visitados
     lista_acciones = []  # Almacena las acciones para llegar al estado objetivo
 
+    # Añadimos el estado inicial al conjunto de estados visitados
     estados_visitados.add(problem.getStartState())
+    # Obtenemos los sucesores del estado inicial
     sucesores = problem.getSuccessors(problem.getStartState())
 
+    # Para cada sucesor del estado inicial, comprobamos si no ha sido visitado,
+    # y en ese caso, lo añadimos a la pila.
     for sucesor in sucesores:
         if sucesor[0] not in estados_visitados:
             pila.push((sucesor[0], sucesor[1]))
 
+    # Mientras la pila no esté vacía, seguimos buscando
     while not pila.isEmpty():
-        estado_actual = pila.list[-1]
+        estado_actual = pila.list[-1]  # Obtenemos el último elemento de la pila
 
+        # Si el estado actual no ha sido visitado, añadimos a la lista de acciones
+        # la acción para llegar a ese estado, y comprobamos si es el estado objetivo.
         if estado_actual[0] not in estados_visitados:
             lista_acciones.append(estado_actual[1])
             if problem.isGoalState(estado_actual[0]):
                 return lista_acciones
             else:
+                # Si no lo es, lo añadimos al conjunto de estados visitados
                 estados_visitados.add(estado_actual[0])
 
+            # Obtenemos los sucesores del estado actual
             sucesores = problem.getSuccessors(estado_actual[0])
             for sucesor in sucesores:
+                # Si el sucesor no ha sido visitado, lo añadimos a la pila
                 if sucesor[0] not in estados_visitados:
                     pila.push((sucesor[0], sucesor[1]))
         else:
+            # Si el estado actual ya ha sido visitado, lo eliminamos de la pila y de la lista de acciones
             pila.pop()
             lista_acciones.pop()
 
