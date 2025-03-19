@@ -182,9 +182,10 @@ def aStarSearch(problem: SearchProblem, heuristic=funcionheuristicaeuclidea) -> 
     costeac = predecesores[estado_actual][1]
     for tupla in listatuplas:
         if tupla[0] not in estados_visitados:
-            valorf = tupla[2] + 0 + heuristic(tupla[0], problem)
+            nuevo_coste = costeac + tupla[2]
+            valorf = nuevo_coste + heuristic(tupla[0], problem)
             colap.push(tupla, valorf)
-            predecesores[tupla[0]] = [tupla[1], costeac + tupla[2], estado_actual]
+            predecesores[tupla[0]] = [tupla[1], nuevo_coste, estado_actual]
 
     while not colap.isEmpty():
         estado_actual, accion, coste = colap.pop()
@@ -198,9 +199,11 @@ def aStarSearch(problem: SearchProblem, heuristic=funcionheuristicaeuclidea) -> 
 
         listatuplas = problem.getSuccessors(estado_actual)
         for tupla in listatuplas:
-            valorf = tupla[2] + costeac + heuristic(tupla[0], problem)
-            colap.push(tupla, valorf)
-            predecesores[tupla[0]] = [tupla[1], costeac + tupla[2], estado_actual]
+            nuevo_coste = costeac + tupla[2]
+            valorf = nuevo_coste + heuristic(tupla[0], problem)
+            if tupla[0] not in predecesores or nuevo_coste < predecesores[tupla[0]][1]:
+                colap.push(tupla, valorf)
+                predecesores[tupla[0]] = [tupla[1], nuevo_coste, estado_actual]
 
     return []
 
