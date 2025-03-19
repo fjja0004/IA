@@ -45,9 +45,48 @@ import pacman
 import random
 
 
+# Version del agente con una pila que almacena sus movimientos.
+# Cuando se encuentra en una casilla rodeada de casillas visitadas, deshace sus pasos
+# hasta encontrar una casilla no visitada.
+class explorador_pila(Agent):
+    def __init__(self):
+        super().__init__()
+        self.celdas_visitadas = set()
+        self.direccion_anterior = None
+        self.pasos = 0
+        self.pila = util.Stack()
+
+    def __del__(self):
+        print("Pasos: ", self.pasos)
+        print("Celdas únicas visitadas: ", len(self.celdas_visitadas))
+        print("Ratio de repetición: ", self.pasos / len(self.celdas_visitadas))
+
+    def getAction(self, state):
+        actual = state.getPacmanPosition()
+        if actual not in self.celdas_visitadas:
+            self.celdas_visitadas.add(actual)
+
+        paredes = state.getWalls()
+        accesibles = Actions.getLegalNeighbors(actual, paredes)
+        for nueva_posicion in accesibles:
+            if nueva_posicion not in self.celdas_visitadas:
+                desplazamiento_x = nueva_posicion[0] - actual[0]
+                desplazamiento_y = nueva_posicion[1] - actual[1]
+                tupla = (desplazamiento_x, desplazamiento_y)
+                self.direccion_anterior = Actions.vectorToDirection(tupla)
+                self.pasos += 1
+                self.pila.push(self.direccion_anterior)
+                return self.direccion_anterior
+
+        dir_contraria = Directions.REVERSE[self.pila.pop()]
+        if dir_contraria in state.getLegalActions():
+            self.direccion_anterior = dir_contraria
+            self.pasos += 1
+            return self.direccion_anterior
 
 
-# Explorador aleatorio
+# Explorador aleatorio. Cunado se encuentra en una casilla rodeada de casillas visitadas,
+# elige una dirección aleatoria.
 class explorador_aleatorio(Agent):
     def __init__(self):
         super().__init__()
