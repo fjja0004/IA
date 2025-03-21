@@ -153,20 +153,24 @@ def nullHeuristic(state, problem=None) -> float:
     """
     return 0
 
+
 def funcionheuristicaeuclidea(state, problem) -> float:
     objetivo = problem.goal
     posactual = state
     dist = math.sqrt((posactual[0] - objetivo[0]) ** 2 + (posactual[1] - objetivo[1]) ** 2)
-    #print(f"Actual: {posactual[0]}, {posactual[1]} | dist: {dist}")
+    # print(f"Actual: {posactual[0]}, {posactual[1]} | dist: {dist}")
     return dist
+
 
 def funcionheuristicamanhattan(state, problem) -> float:
     objetivo = problem.goal
     posactual = state
     dist = abs(posactual[0] - objetivo[0]) + abs(posactual[1] - objetivo[1])
-    #print(f"Actual: {posactual[0]}, {posactual[1]} | dist: {dist}")
+    # print(f"Actual: {posactual[0]}, {posactual[1]} | dist: {dist}")
     return dist
 
+
+# Función auxiliar para generar la lista de acciones a partir de los predecesores
 def generarlista(estado_objetivo, predecesores) -> List[Directions]:
     ruta = []
     while predecesores[estado_objetivo][2] is not None:
@@ -175,41 +179,42 @@ def generarlista(estado_objetivo, predecesores) -> List[Directions]:
 
     return ruta
 
+
 def aStarSearch(problem: SearchProblem, heuristic=funcionheuristicaeuclidea) -> List[Directions]:
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    colap = util.PriorityQueue() # Cola por prioridad de tuplas
-    predecesores = {} # Diccionario de listas [movimiento, costeac, estadoant]
+    colap = util.PriorityQueue()  # Cola por prioridad de tuplas (estado, valorf)
+    predecesores = {}  # Diccionario de listas [movimiento, costeac, estadoant]
 
     predecesores[problem.getStartState()] = [None, 0, None]
     estado_actual = problem.getStartState()
-    costeac = predecesores[estado_actual][1]
-    listatuplas = problem.getSuccessors(estado_actual)
-    for tupla in listatuplas:
-        nuevo_coste = costeac + tupla[2]
-        valorf = nuevo_coste + heuristic(tupla[0], problem)
-        colap.push(tupla, valorf)
-        predecesores[tupla[0]] = [tupla[1], nuevo_coste, estado_actual]
+    coste_acumulado = predecesores[estado_actual][1]
+
+    # Obtenemos los sucesores del estado actual
+    lista_tuplas_sucesores = problem.getSuccessors(estado_actual)
+    for sucesor in lista_tuplas_sucesores:
+        nuevo_coste = coste_acumulado + sucesor[2]
+        valorf = nuevo_coste + heuristic(sucesor[0], problem)
+        colap.push(sucesor, valorf)
+        predecesores[sucesor[0]] = [sucesor[1], nuevo_coste, estado_actual]
 
     while not colap.isEmpty():
-        estado_actual, accion, coste = colap.pop()
-        costeac = predecesores[estado_actual][1]
+        estado_actual = colap.pop()[0]
+        coste_acumulado = predecesores[estado_actual][1]
 
         if problem.isGoalState(estado_actual):
             return generarlista(estado_actual, predecesores)  # Objetivo alcanzado
 
-        listatuplas = problem.getSuccessors(estado_actual)
-        for tupla in listatuplas:
-            nuevo_coste = costeac + tupla[2]
-            valorf = nuevo_coste + heuristic(tupla[0], problem)
-            if tupla[0] not in predecesores or nuevo_coste < predecesores[tupla[0]][1]:
-                colap.update(tupla, valorf)
-                predecesores[tupla[0]] = [tupla[1], nuevo_coste, estado_actual]
+        lista_tuplas_sucesores = problem.getSuccessors(estado_actual)
+        for sucesor in lista_tuplas_sucesores:
+            nuevo_coste = coste_acumulado + sucesor[2]
+            valorf = nuevo_coste + heuristic(sucesor[0], problem)
+            # Si el sucesor no ha sido visitado o el nuevo coste es menor que el anterior, lo añadimos a la cola
+            if sucesor[0] not in predecesores or nuevo_coste < predecesores[sucesor[0]][1]:
+                colap.update(sucesor, valorf)
+                predecesores[sucesor[0]] = [sucesor[1], nuevo_coste, estado_actual]
 
     return []
-
-
-
 
 
 # Abbreviations
