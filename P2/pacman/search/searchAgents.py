@@ -45,7 +45,7 @@ import pacman
 import random
 
 
-# Version del agente con una pila que almacena sus movimientos.
+# Version del agente explorador con una pila que almacena sus movimientos.
 # Cuando se encuentra en una casilla rodeada de casillas visitadas, deshace sus pasos
 # hasta encontrar una casilla no visitada.
 class explorador_pila(Agent):
