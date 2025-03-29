@@ -48,7 +48,7 @@ import random
 # Version del agente explorador con una pila que almacena sus movimientos.
 # Cuando se encuentra en una casilla rodeada de casillas visitadas, deshace sus pasos
 # hasta encontrar una casilla no visitada.
-class explorador_pila(Agent):
+class explorador(Agent):
     def __init__(self):
         super().__init__()
         self.celdas_visitadas = set()  # Conjunto de celdas visitadas

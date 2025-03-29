@@ -169,12 +169,13 @@ def funcionheuristicamanhattan(state, problem) -> float:
     return dist
 
 
-# Función auxiliar para generar la lista de acciones a partir de los predecesores
-def generarlista(estado_objetivo, predecesores) -> List[Directions]:
+# Función auxiliar que genera la lista de movimientos para llegar al objetivo
+# a partir de los nodos.
+def generarlista(estado_objetivo, nodos) -> List[Directions]:
     ruta = []
-    while predecesores[estado_objetivo][2] is not None:
-        ruta.insert(0, predecesores[estado_objetivo][0])
-        estado_objetivo = predecesores[estado_objetivo][2]
+    while nodos[estado_objetivo][2] is not None:
+        ruta.insert(0, nodos[estado_objetivo][0])
+        estado_objetivo = nodos[estado_objetivo][2]
 
     return ruta
 
@@ -182,38 +183,42 @@ def generarlista(estado_objetivo, predecesores) -> List[Directions]:
 def aStarSearch(problem: SearchProblem, heuristic=funcionheuristicaeuclidea) -> List[Directions]:
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    colap = util.PriorityQueue()  # Cola por prioridad de tuplas (estado, valorf)
-    predecesores = {}  # Diccionario de listas [movimiento, costeac, estadoant]
+    colap = util.PriorityQueue()  # Cola por prioridad de tuplas (estado, valor_f)
+    nodos = {}  # Diccionario de listas [movimiento, coste_acumulado, estado_anterior]
 
-    predecesores[problem.getStartState()] = [None, 0, None]
+    nodos[problem.getStartState()] = [None, 0, None]
     estado_actual = problem.getStartState()
-    coste_acumulado = predecesores[estado_actual][1]
+    coste_acumulado = nodos[estado_actual][1]
 
     # Obtenemos los sucesores del estado actual
     lista_tuplas_sucesores = problem.getSuccessors(estado_actual)
+
     for sucesor in lista_tuplas_sucesores:
-        nuevo_coste = coste_acumulado + sucesor[2]
-        valorf = nuevo_coste + heuristic(sucesor[0], problem)
-        colap.push(sucesor, valorf)
-        predecesores[sucesor[0]] = [sucesor[1], nuevo_coste, estado_actual]
+        nuevo_coste = coste_acumulado + sucesor[2]  # Coste acumulado hasta llegar al sucesor
+        valor_f = nuevo_coste + heuristic(sucesor[0],
+                                          problem)  # Valor f del sucesor (coste para llegar a él + heurística)
+        colap.push(sucesor, valor_f)  # Añadimos el sucesor y su valor f a la cola
+        nodos[sucesor[0]] = [sucesor[1], nuevo_coste, estado_actual]  # Añadimos el sucesor al diccionario de nodos
 
     while not colap.isEmpty():
-        estado_actual = colap.pop()[0]
-        coste_acumulado = predecesores[estado_actual][1]
+        estado_actual = colap.pop()[0]  # Obtenemos el estado con menor valor f
+        coste_acumulado = nodos[estado_actual][1]  # Coste acumulado hasta el estado actual
 
+        # Si se ha alcanzado el objetivo, generamos la lista de movimientos para llegar a él
         if problem.isGoalState(estado_actual):
-            return generarlista(estado_actual, predecesores)  # Objetivo alcanzado
+            return generarlista(estado_actual, nodos)  # Objetivo alcanzado
 
         lista_tuplas_sucesores = problem.getSuccessors(estado_actual)
-        for sucesor in lista_tuplas_sucesores:
-            nuevo_coste = coste_acumulado + sucesor[2]
-            valorf = nuevo_coste + heuristic(sucesor[0], problem)
-            # Si el sucesor no ha sido visitado o el nuevo coste es menor que el anterior, lo añadimos a la cola
-            if sucesor[0] not in predecesores or nuevo_coste < predecesores[sucesor[0]][1]:
-                colap.update(sucesor, valorf)
-                predecesores[sucesor[0]] = [sucesor[1], nuevo_coste, estado_actual]
 
-    return []
+        for sucesor in lista_tuplas_sucesores:
+            nuevo_coste = coste_acumulado + sucesor[2]  # Coste acumulado hasta llegar al sucesor
+            valor_f = nuevo_coste + heuristic(sucesor[0],
+                                              problem)  # Valor f del sucesor (coste para llegar a él + heurística)
+
+            # Si el sucesor no ha sido visitado o el nuevo coste es menor que el anterior, lo añadimos a la cola
+            if sucesor[0] not in nodos or nuevo_coste < nodos[sucesor[0]][1]:
+                colap.update(sucesor, valor_f)
+                nodos[sucesor[0]] = [sucesor[1], nuevo_coste, estado_actual]
 
 
 # Abbreviations
